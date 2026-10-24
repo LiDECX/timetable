@@ -68,23 +68,70 @@ body{
 .custom-select:hover{background-color:var(--card-hover);border-color:var(--primary)}
 .custom-select option,.custom-select optgroup{background:var(--card);color:var(--text);font-weight:500}
 
-.btn-toggle{
-  display:none;background:var(--card);border:1px solid var(--border);color:var(--text);
-  padding:7px 12px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:600;
-  cursor:pointer;transition:background-color var(--t),border-color var(--t);
+.burger-btn{
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  width:34px;height:34px;border-radius:var(--radius-sm);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  transition:background-color var(--t),border-color var(--t);
 }
-.btn-toggle:hover{background:var(--card-hover);border-color:var(--primary)}
+.burger-btn:hover{background:var(--card-hover);border-color:var(--primary)}
+.burger-btn span{
+  display:block;width:16px;height:2px;background:var(--text);border-radius:2px;
+  transition:transform .3s var(--ease),opacity .3s var(--ease),background-color var(--t);
+}
+
+.burger-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);z-index:998;opacity:0;pointer-events:none;
+  transition:opacity .35s var(--ease);
+}
+.burger-overlay.open{opacity:1;pointer-events:auto}
+
+.burger-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(380px,92vw);
+  background:var(--bg);border-left:1px solid var(--border);z-index:999;
+  padding:16px 14px 28px;display:flex;flex-direction:column;gap:16px;
+  overflow-y:auto;box-shadow:var(--shadow);
+  transform:translateX(100%);
+  transition:transform .4s var(--ease),background-color var(--t),border-color var(--t);
+}
+.burger-drawer.open{transform:translateX(0)}
+
+.drawer-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-bottom:12px;border-bottom:1px solid var(--border);
+}
+.drawer-title{font-size:1.05rem;font-weight:800;letter-spacing:-.3px}
+.drawer-close{
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  width:30px;height:30px;border-radius:8px;font-size:.9rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background-color var(--t),border-color var(--t),color var(--t);
+}
+.drawer-close:hover{background:var(--card-hover);border-color:var(--primary)}
+
+.drawer-section{display:flex;flex-direction:column;gap:9px}
+.drawer-section-title{
+  font-size:.73rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--text2);display:flex;justify-content:space-between;align-items:center;
+}
+
+.theme-pills{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.theme-pill{
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:9px 8px;border-radius:var(--radius-sm);font-family:inherit;
+  font-size:.78rem;font-weight:700;cursor:pointer;text-align:center;
+  transition:background-color var(--t),border-color var(--t),color var(--t);
+}
+.theme-pill:hover:not(.active){background:var(--card-hover);border-color:var(--text2)}
+.theme-pill.active{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
 
 .custom-panel{
   display:none;background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);
-  transition:background-color var(--t),border-color var(--t),box-shadow var(--t);
+  border-radius:var(--radius);padding:13px;
+  transition:background-color var(--t),border-color var(--t);
 }
-.custom-panel.visible{display:block;animation:fadeSlide .4s var(--ease)}
-.cp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.cp-title{font-size:.85rem;font-weight:700;color:var(--text)}
-.cp-close{background:transparent;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer;line-height:1}
-.cp-close:hover{color:var(--text)}
+.custom-panel.visible{display:block;animation:fadeSlide .35s var(--ease)}
 .cp-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
 .cp-label{font-size:.72rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
 .cp-toggle{display:flex;gap:6px}
@@ -131,10 +178,11 @@ body{
 .dash-info{font-size:.95rem;font-weight:700;line-height:1.25;margin-bottom:3px;transition:color var(--t)}
 .dash-timer{font-size:.8rem;color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums;transition:color var(--t)}
 
-.weekend-msg{display:none;margin-top:9px;background:var(--primary-soft);padding:10px;border-radius:var(--radius-sm);text-align:center;border:1px solid var(--primary)}
+.weekend-msg{display:none;margin-top:9px;background:var(--primary-soft);padding:11px 12px;border-radius:var(--radius-sm);text-align:center;border:1px solid var(--primary)}
 .weekend-msg.visible{display:block}
-.weekend-title{font-size:1rem;font-weight:800;color:var(--primary);margin-bottom:2px}
+.weekend-title{font-size:.95rem;font-weight:800;color:var(--primary);margin-bottom:2px;text-transform:uppercase}
 .weekend-subtitle{font-size:.8rem;color:var(--text)}
+.weekend-countdown{margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:.76rem;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1.35}
 @keyframes fadeSlide{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:translateY(0)}}
 
 .progress-wrap{margin-top:11px;display:none}
@@ -143,7 +191,7 @@ body{
 .progress-bar{height:6px;background:var(--bg2);border-radius:99px;overflow:hidden}
 .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width 1.1s var(--ease)}
 
-.dash-end{font-size:.74rem;color:var(--text2);margin-top:9px;display:flex;align-items:center;gap:6px;font-weight:500;transition:color var(--t)}
+.dash-end{font-size:.74rem;color:var(--text2);margin-top:9px;display:flex;align-items:center;gap:6px;font-weight:500;transition:color var(--t);text-align:center}
 .dash-end::before,.dash-end::after{content:'';flex:1;height:1px;background:var(--border)}
 
 .day-selector{display:flex;gap:5px;overflow-x:auto;overflow-y:hidden;padding:2px 1px 4px;scrollbar-width:none;touch-action:pan-y}
@@ -161,7 +209,7 @@ body{
 .day-btn.today-btn:not(.active) .day-num{color:var(--primary)}
 .day-btn:hover:not(.active){background:var(--card-hover);border-color:var(--text2)}
 
-.schedule-card{
+.schedule-card,.vacations-card{
   background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
   overflow:hidden;box-shadow:var(--shadow);
   transition:background-color var(--t),border-color var(--t),box-shadow var(--t);
@@ -203,12 +251,35 @@ body{
 .tag-current{background:var(--primary);color:var(--on-primary)}
 .tag-next{background:var(--accent);color:var(--on-primary)}
 
+.vac-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 12px;border-bottom:1px solid var(--border);gap:10px;
+  position:relative;transition:background-color var(--t),padding-left var(--t);
+}
+.vac-row:last-child{border-bottom:none}
+.vac-row:hover{background:var(--card-hover)}
+.vac-row.active-vac{background:var(--primary-soft);padding-left:15px}
+.vac-row.active-vac::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary)}
+.vac-row.next-vac{background:var(--accent-soft);padding-left:15px}
+.vac-row.next-vac::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+.vac-row.past-vac{opacity:.45}
+.vac-info{display:flex;flex-direction:column;gap:2px}
+.vac-name{font-size:.84rem;font-weight:700;color:var(--text)}
+.vac-dates{font-size:.7rem;color:var(--text2);font-weight:500}
+.vac-right{text-align:right;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.vac-days{font-size:.74rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums}
+.vac-status{font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:50px;text-transform:uppercase;letter-spacing:.3px;font-variant-numeric:tabular-nums}
+.vac-status-active{background:var(--primary);color:var(--on-primary)}
+.vac-status-next{background:var(--accent);color:var(--on-primary)}
+.vac-status-future{background:var(--bg2);color:var(--text2)}
+.vac-status-past{background:var(--bg2);color:var(--text2)}
+
 @media (max-width:500px){
   body{padding:10px 8px 28px}
   .container{gap:8px}
   .header h1{font-size:1.15rem}
   .custom-select{padding:6px 26px 6px 9px;font-size:.75rem;background-size:11px}
-  .btn-toggle{padding:6px 10px;font-size:.75rem}
+  .burger-btn{width:32px;height:32px}
   .dashboard{padding:13px 13px}
   .time-display{font-size:1.85rem;letter-spacing:-1.2px}
   .date-display{font-size:.72rem}
@@ -223,6 +294,9 @@ body{
   .day-btn .day-num{font-size:.95rem}
   .cp-grid{grid-template-columns:repeat(3,1fr);gap:6px}
   .cp-item input[type=color]{height:26px}
+  .vac-row{padding:9px 11px}
+  .vac-name{font-size:.8rem}
+  .vac-dates{font-size:.68rem}
 }
 </style>
 </head>
@@ -240,36 +314,11 @@ body{
           <option value="tech">Технологический</option>
         </select>
       </div>
-      <div class="custom-select-wrapper">
-        <select class="custom-select" id="themeSelect" onchange="switchTheme()">
-          <option value="black">Чёрная</option>
-          <option value="white">Белая</option>
-          <option value="custom">Своя тема</option>
-        </select>
-      </div>
-      <button class="btn-toggle" id="toggleCustomBtn" onclick="toggleCustomPanel()">Палитра</button>
-    </div>
-  </div>
-
-  <div class="custom-panel" id="customPanel">
-    <div class="cp-header">
-      <span class="cp-title">Настройка цветов</span>
-      <button class="cp-close" onclick="toggleCustomPanel()">✕</button>
-    </div>
-    <div class="cp-row">
-      <span class="cp-label">Тон</span>
-      <div class="cp-toggle">
-        <button type="button" class="cp-tone" data-tone="dark">Тёмная</button>
-        <button type="button" class="cp-tone" data-tone="light">Светлая</button>
-      </div>
-    </div>
-    <div class="cp-grid">
-      <label class="cp-item">Фон<input type="color" id="cpBg" value="#0d0d12"></label>
-      <label class="cp-item">Карточка<input type="color" id="cpCard" value="#16161d"></label>
-      <label class="cp-item">Текст<input type="color" id="cpText" value="#ffffff"></label>
-      <label class="cp-item">Основной<input type="color" id="cpPrimary" value="#3b82f6"></label>
-      <label class="cp-item">Акцент<input type="color" id="cpAccent" value="#f59e0b"></label>
-      <label class="cp-item">Доп.<input type="color" id="cpGreen" value="#10b981"></label>
+      <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()" aria-label="Меню">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </div>
 
@@ -291,8 +340,9 @@ body{
     <div class="dash-timer" id="timerStatus"></div>
 
     <div class="weekend-msg" id="weekendMsg">
-      <div class="weekend-title">СЕГОДНЯ ВЫХОДНОЙ</div>
-      <div class="weekend-subtitle">Уроков нет, можно расслабиться и отдохнуть.</div>
+      <div class="weekend-title" id="weekendTitle">СЕГОДНЯ ВЫХОДНОЙ</div>
+      <div class="weekend-subtitle" id="weekendSubtitle">Уроков нет, можно расслабиться и отдохнуть.</div>
+      <div class="weekend-countdown" id="weekendCountdown"></div>
     </div>
 
     <div class="progress-wrap" id="progressWrap">
@@ -311,6 +361,54 @@ body{
   <div id="scheduleWrapper"></div>
 
 </div>
+
+<div class="burger-overlay" id="burgerOverlay" onclick="toggleBurger(false)"></div>
+
+<aside class="burger-drawer" id="burgerDrawer">
+  <div class="drawer-header">
+    <span class="drawer-title">Меню</span>
+    <button class="drawer-close" onclick="toggleBurger(false)" aria-label="Закрыть">✕</button>
+  </div>
+
+  <div class="drawer-section">
+    <div class="drawer-section-title">
+      <span>Тема оформления</span>
+    </div>
+    <div class="theme-pills">
+      <button type="button" class="theme-pill" data-theme-opt="black" onclick="selectTheme('black')">Чёрная</button>
+      <button type="button" class="theme-pill" data-theme-opt="white" onclick="selectTheme('white')">Белая</button>
+      <button type="button" class="theme-pill" data-theme-opt="custom" onclick="selectTheme('custom')">Своя</button>
+    </div>
+
+    <div class="custom-panel" id="customPanel">
+      <div class="cp-row">
+        <span class="cp-label">Тон</span>
+        <div class="cp-toggle">
+          <button type="button" class="cp-tone" data-tone="dark">Тёмная</button>
+          <button type="button" class="cp-tone" data-tone="light">Светлая</button>
+        </div>
+      </div>
+      <div class="cp-grid">
+        <label class="cp-item">Фон<input type="color" id="cpBg" value="#0d0d12"></label>
+        <label class="cp-item">Карточка<input type="color" id="cpCard" value="#16161d"></label>
+        <label class="cp-item">Текст<input type="color" id="cpText" value="#ffffff"></label>
+        <label class="cp-item">Основной<input type="color" id="cpPrimary" value="#3b82f6"></label>
+        <label class="cp-item">Акцент<input type="color" id="cpAccent" value="#f59e0b"></label>
+        <label class="cp-item">Доп.<input type="color" id="cpGreen" value="#10b981"></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-section">
+    <div class="drawer-section-title">
+      <span>Расписание каникул</span>
+      <span>2026 / 2027</span>
+    </div>
+    <div class="vacations-card">
+      <div id="vacationsList"></div>
+    </div>
+  </div>
+</aside>
 
 <script>
 (function () {
@@ -341,7 +439,15 @@ body{
     { start:"16:15", end:"17:00" }, { start:"17:10", end:"17:55" }
   ];
 
+  const vacations = [
+    { name: "Осенние каникулы", start: "2026-10-26", end: "2026-11-03", days: 9, label: "26 октября — 3 ноября 2026" },
+    { name: "Зимние каникулы", start: "2026-12-31", end: "2027-01-10", days: 11, label: "31 декабря 2026 — 10 января 2027" },
+    { name: "Весенние каникулы", start: "2027-03-27", end: "2027-04-04", days: 9, label: "27 марта — 4 апреля 2027" },
+    { name: "Летние каникулы", start: "2027-05-27", end: "2027-08-31", days: 97, label: "27 мая — 31 августа 2027" }
+  ];
+
   const DAYS_FULL = ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
+  const DAYS_ACC  = ["воскресенье","понедельник","вторник","среду","четверг","пятницу","субботу"];
   const MONTHS    = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
 
   const THEMES = ['black','white','custom'];
@@ -357,8 +463,9 @@ body{
   let currentTheme   = localStorage.getItem('scheduleTheme') || 'black';
   if (THEMES.indexOf(currentTheme) === -1) currentTheme = 'black';
   let selectedDay = 1;
-  let customPanelVisible = false;
+  let burgerOpen = false;
   let lastBuildDayKey = '';
+  let lastVacationKey = '';
 
   let tagState = { day: -1, cur: -2, next: -2 };
 
@@ -424,28 +531,33 @@ body{
 
   function applyTheme() {
     document.body.setAttribute('data-theme', currentTheme);
-    const btn = document.getElementById('toggleCustomBtn');
     const panel = document.getElementById('customPanel');
+
+    document.querySelectorAll('.theme-pill').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-theme-opt') === currentTheme);
+    });
 
     if (currentTheme === 'custom') {
       applyCustomTheme();
-      btn.style.display = 'inline-block';
+      panel.classList.add('visible');
     } else {
       clearCustomTheme();
-      btn.style.display = 'none';
       panel.classList.remove('visible');
-      customPanelVisible = false;
     }
   }
 
-  window.toggleCustomPanel = function () {
-    const panel = document.getElementById('customPanel');
-    customPanelVisible = !customPanelVisible;
-    if (customPanelVisible) {
-      panel.classList.add('visible');
-    } else {
-      panel.classList.remove('visible');
-    }
+  window.toggleBurger = function (forceState) {
+    burgerOpen = typeof forceState === 'boolean' ? forceState : !burgerOpen;
+    document.getElementById('burgerDrawer').classList.toggle('open', burgerOpen);
+    document.getElementById('burgerOverlay').classList.toggle('open', burgerOpen);
+    document.body.style.overflow = burgerOpen ? 'hidden' : '';
+  };
+
+  window.selectTheme = function (themeName) {
+    if (THEMES.indexOf(themeName) === -1) return;
+    currentTheme = themeName;
+    localStorage.setItem('scheduleTheme', currentTheme);
+    applyTheme();
   };
 
   function syncCustomPanel() {
@@ -475,18 +587,35 @@ body{
     });
   }
 
-  function parseTime(str) {
+  function parseTime(str, baseDate) {
     const parts = str.split(':');
-    const d = new Date();
+    const d = baseDate ? new Date(baseDate) : new Date();
     d.setHours(Number(parts[0]), Number(parts[1]), 0, 0);
     return d;
+  }
+
+  function parseYMD(str, endOfDay) {
+    const p = str.split('-');
+    if (endOfDay) return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]), 23, 59, 59, 999);
+    return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]), 0, 0, 0, 0);
+  }
+
+  function plural(n, one, two, five) {
+    let a = Math.abs(n) % 100;
+    if (a >= 5 && a <= 20) return five;
+    a %= 10;
+    if (a === 1) return one;
+    if (a >= 2 && a <= 4) return two;
+    return five;
   }
 
   function fmtCountdown(ms) {
     if (ms <= 0) return "0 сек";
     let s = Math.floor(ms / 1000);
-    const h = Math.floor(s / 3600); s %= 3600;
-    const m = Math.floor(s / 60);   s %= 60;
+    const d = Math.floor(s / 86400); s %= 86400;
+    const h = Math.floor(s / 3600);  s %= 3600;
+    const m = Math.floor(s / 60);    s %= 60;
+    if (d > 0) return d + " дн " + h + " ч " + m + " мин " + s + " сек";
     if (h > 0) return h + " ч " + m + " мин " + s + " сек";
     if (m > 0) return m + " мин " + s + " сек";
     return s + " сек";
@@ -495,9 +624,113 @@ body{
   function isEmpty(lesson) { return !lesson || lesson.trim() === "—" || lesson.trim() === ""; }
   function getProfile() { return scheduleData[currentProfile] || scheduleData.socio; }
 
+  function getVacationForDate(date) {
+    for (let i = 0; i < vacations.length; i++) {
+      const s = parseYMD(vacations[i].start, false);
+      const e = parseYMD(vacations[i].end, true);
+      if (date >= s && date <= e) return vacations[i];
+    }
+    return null;
+  }
+
+  function findNextSchoolLesson(now) {
+    const profile = getProfile();
+    for (let offset = 1; offset <= 150; offset++) {
+      const checkDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + offset, 12, 0, 0, 0);
+      const dow = checkDate.getDay();
+      if (dow === 0 || dow === 6) continue;
+      if (getVacationForDate(checkDate)) continue;
+      const dayLessons = profile[dow];
+      if (!dayLessons) continue;
+      for (let i = 0; i < dayLessons.length; i++) {
+        if (!isEmpty(dayLessons[i]) && ringSchedule[i]) {
+          const lessonStart = parseTime(ringSchedule[i].start, checkDate);
+          return {
+            date: lessonStart,
+            name: dayLessons[i],
+            num: i + 1,
+            dow: dow,
+            offset: offset
+          };
+        }
+      }
+    }
+    return null;
+  }
+
+  function renderVacations(now) {
+    const key = now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate();
+    if (key === lastVacationKey) return;
+    lastVacationKey = key;
+
+    const list = document.getElementById('vacationsList');
+    list.innerHTML = '';
+
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    let nextFound = false;
+
+    vacations.forEach(function (v) {
+      const s = parseYMD(v.start, false);
+      const e = parseYMD(v.end, true);
+
+      const row = document.createElement('div');
+      let rowClass = 'vac-row';
+      let statusText = '';
+      let statusClass = 'vac-status ';
+
+      if (now >= s && now <= e) {
+        rowClass += ' active-vac';
+        const leftDays = Math.ceil((e - now) / 86400000);
+        statusText = 'Идут • ещё ' + leftDays + ' ' + plural(leftDays, 'день', 'дня', 'дней');
+        statusClass += 'vac-status-active';
+      } else if (now < s) {
+        const diffDays = Math.ceil((s - todayStart) / 86400000);
+        if (!nextFound) {
+          nextFound = true;
+          rowClass += ' next-vac';
+          statusClass += 'vac-status-next';
+        } else {
+          statusClass += 'vac-status-future';
+        }
+        statusText = 'Через ' + diffDays + ' ' + plural(diffDays, 'день', 'дня', 'дней');
+      } else {
+        rowClass += ' past-vac';
+        statusText = 'Прошли';
+        statusClass += 'vac-status-past';
+      }
+
+      row.className = rowClass;
+
+      const info = document.createElement('div');
+      info.className = 'vac-info';
+      const nm = document.createElement('div');
+      nm.className = 'vac-name';
+      nm.textContent = v.name;
+      const dt = document.createElement('div');
+      dt.className = 'vac-dates';
+      dt.textContent = v.label;
+      info.appendChild(nm);
+      info.appendChild(dt);
+
+      const right = document.createElement('div');
+      right.className = 'vac-right';
+      const daysEl = document.createElement('div');
+      daysEl.className = 'vac-days';
+      daysEl.textContent = v.days + ' ' + plural(v.days, 'день', 'дня', 'дней');
+      const stEl = document.createElement('div');
+      stEl.className = statusClass;
+      stEl.textContent = statusText;
+      right.appendChild(daysEl);
+      right.appendChild(stEl);
+
+      row.appendChild(info);
+      row.appendChild(right);
+      list.appendChild(row);
+    });
+  }
+
   function init() {
     document.getElementById('profileSelect').value = currentProfile;
-    document.getElementById('themeSelect').value = currentTheme;
     syncCustomPanel();
     bindCustomPanel();
     applyTheme();
@@ -508,11 +741,15 @@ body{
 
     buildDaySelector();
     selectDay(dow);
+    renderVacations(now);
     updateClock();
     setInterval(updateClock, 1000);
     setInterval(buildDaySelector, 60000);
 
     setupSwipe();
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && burgerOpen) window.toggleBurger(false);
+    });
   }
 
   function setupSwipe() {
@@ -522,14 +759,14 @@ body{
     let touching = false;
 
     container.addEventListener('touchstart', function (e) {
-      if (e.touches.length !== 1) return;
+      if (burgerOpen || e.touches.length !== 1) return;
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
       touching = true;
     }, { passive: true });
 
     container.addEventListener('touchend', function (e) {
-      if (!touching) return;
+      if (!touching || burgerOpen) return;
       touching = false;
       const t = e.changedTouches[0];
       const dx = t.clientX - touchStartX;
@@ -549,12 +786,6 @@ body{
     localStorage.setItem('scheduleProfile', currentProfile);
     renderSchedule();
     updateClock();
-  };
-
-  window.switchTheme = function () {
-    currentTheme = document.getElementById('themeSelect').value;
-    localStorage.setItem('scheduleTheme', currentTheme);
-    applyTheme();
   };
 
   function buildDaySelector() {
@@ -665,6 +896,8 @@ body{
     document.getElementById('dateDisplay').textContent =
       DAYS_FULL[now.getDay()] + ', ' + now.getDate() + ' ' + MONTHS[now.getMonth()];
 
+    renderVacations(now);
+
     const dow = now.getDay();
     const statusEl   = document.getElementById('lessonStatus');
     const timerEl    = document.getElementById('timerStatus');
@@ -674,6 +907,9 @@ body{
     const pWrap      = document.getElementById('progressWrap');
     const pFill      = document.getElementById('progressFill');
     const weekendMsg = document.getElementById('weekendMsg');
+    const wTitle     = document.getElementById('weekendTitle');
+    const wSub       = document.getElementById('weekendSubtitle');
+    const wCount     = document.getElementById('weekendCountdown');
 
     timerEl.textContent = '';
     endEl.textContent = '';
@@ -682,11 +918,42 @@ body{
     statusEl.style.display = 'block';
     timerEl.style.display = 'block';
 
+    const curVac = getVacationForDate(now);
+
+    if (curVac) {
+      setBadge(badge, badgeLbl, 'free', 'Каникулы');
+      statusEl.style.display = 'none';
+      timerEl.style.display = 'none';
+      wTitle.textContent = curVac.name;
+      wSub.textContent = curVac.label + ' (' + curVac.days + ' ' + plural(curVac.days, 'день', 'дня', 'дней') + ')';
+      const nextLes = findNextSchoolLesson(now);
+      if (nextLes) {
+        wCount.textContent = 'До 1-го урока (' + nextLes.name + '): ' + fmtCountdown(nextLes.date - now);
+        endEl.textContent = 'В школу ' + nextLes.date.getDate() + ' ' + MONTHS[nextLes.date.getMonth()] + ' (' + DAYS_FULL[nextLes.dow].toLowerCase() + ')';
+      } else {
+        wCount.textContent = '';
+        endEl.textContent = 'Хорошего отдыха!';
+      }
+      weekendMsg.classList.add('visible');
+      updateTags(-1, -1, false);
+      return;
+    }
+
     if (dow === 0 || dow === 6) {
       setBadge(badge, badgeLbl, 'free', 'Выходные');
       statusEl.style.display = 'none';
       timerEl.style.display = 'none';
-      endEl.textContent = 'Увидимся в понедельник!';
+      wTitle.textContent = 'СЕГОДНЯ ВЫХОДНОЙ';
+      wSub.textContent = 'Уроков нет, можно расслабиться и отдохнуть.';
+      const nextLes = findNextSchoolLesson(now);
+      if (nextLes) {
+        const dayLabel = nextLes.offset <= 2 && nextLes.dow === 1 ? 'в понедельник' : nextLes.date.getDate() + ' ' + MONTHS[nextLes.date.getMonth()];
+        wCount.textContent = 'До урока ' + dayLabel + ' (' + nextLes.name + '): ' + fmtCountdown(nextLes.date - now);
+        endEl.textContent = nextLes.dow === 1 && nextLes.offset <= 2 ? 'Увидимся в понедельник!' : 'Впереди каникулы!';
+      } else {
+        wCount.textContent = '';
+        endEl.textContent = 'Хороших выходных!';
+      }
       weekendMsg.classList.add('visible');
       updateTags(-1, -1, false);
       return;
@@ -788,7 +1055,15 @@ body{
         if (badgeType !== 'lesson') {
           setBadge(badge, badgeLbl, 'free', 'Конец');
           statusEl.textContent = 'Можно идти домой!';
-          timerEl.textContent = '';
+          const nextLes = findNextSchoolLesson(now);
+          if (nextLes) {
+            let whenStr = 'в ' + DAYS_ACC[nextLes.dow];
+            if (nextLes.offset === 1) whenStr = 'завтра';
+            else if (nextLes.offset > 3) whenStr = nextLes.date.getDate() + ' ' + MONTHS[nextLes.date.getMonth()];
+            timerEl.textContent = 'До урока ' + whenStr + ' (' + nextLes.name + '): ' + fmtCountdown(nextLes.date - now);
+          } else {
+            timerEl.textContent = '';
+          }
         }
       }
     }
